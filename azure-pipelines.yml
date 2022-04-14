@@ -32,4 +32,4 @@ stages:
                   LOCATION="eastus"
                   ACR="mydockeracrnewtoday"
                   az group create -l $LOCATION -n $RESOURCE_GROUP
-                  az acr create --name "ACR" --resource-group $RESOURCE_GROUP --sku basic --admin-enable true
+                  az acr create --name $ACR --resource-group $RESOURCE_GROUP --sku basic --admin-enable true
