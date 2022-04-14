@@ -17,11 +17,11 @@ stages:
 - stage: create_acr
   jobs:
   - job: "create_acr"
+    displayName: CREATE RG AND ACR
+    pool:
+      vmImage: $(vmImageName)
     steps:
           - task: AzureCLI@2
-            displayName: CREATE RG AND ACR
-            pool:
-              vmImage: $(vmImageName)
             inputs:
               azureSubscription: 'Azure subscription 1 (7c95b25d-a3ce-47f1-bee8-4fe38e644646)'
               scriptType: 'bash'
