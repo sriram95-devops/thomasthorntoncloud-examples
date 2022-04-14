@@ -74,3 +74,28 @@ stages:
                                             -g $RESOURCE_GROUP \
                                             -l $LOCATION
 
+
+- stage: deploy_webapp_container
+  dependsOn: [create_webapp_container]
+  jobs:
+    - job: deploy_create_app
+      pool:
+       vmImage: $(vmImageName)
+      steps:
+        - task: AzureCLI@2
+          inputs:
+            azureSubscription: 'Azure subscription 1 (7c95b25d-a3ce-47f1-bee8-4fe38e644646)'
+            scriptType: 'bash'
+            scriptLocation: 'inlineScript'
+            inlineScript: |
+              #!/bin/bash
+                              az extension add \
+                              az config set extension.use_dynamic_install=yes_without_prompt
+                              az provider register --namespace Microsoft.App
+                              
+                              RESOURCE_GROUP="RG"
+                              CONTAINERAPPS_ENVIRONMENT="tamops-environment"
+                              az containerapp update \
+                                --name tamopsapp \
+                                --resource-group $RESOURCE_GROUP \
+                                --image mydockeracrnewtoday.azurecr.io/mydockeracrnewtoday:'$(Build.BuildId)''
