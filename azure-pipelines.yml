@@ -89,12 +89,15 @@ stages:
             scriptLocation: 'inlineScript'
             inlineScript: |
               #!/bin/bash
-                              az extension add --upgrade --name anextension
+                              az extension add
                               az config set extension.use_dynamic_install=yes_without_prompt
                               az provider register --namespace Microsoft.App
                               
                               RESOURCE_GROUP="RG"
                               CONTAINERAPPS_ENVIRONMENT="tamops-environment"
+                              az containerapp create \
+                               --name tamopsapp \
+                               --resource-group $RESOURCE_GROUP
                               az containerapp update \
                                 --name tamopsapp \
                                 --resource-group $RESOURCE_GROUP \
