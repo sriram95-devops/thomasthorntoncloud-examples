@@ -28,7 +28,8 @@ stages:
               scriptLocation: 'inlineScript'
               inlineScript: |
                   #!/bin/bash
-                  - task: AzureCLI@2
+                  RESOURCE_GROUP="myres"
+                  LOCATION="eastus"
                   ACR="mydockeracrnewtoday"
                   az group create -l $LOCATION -n $RESOURCE_GROUP
                   az acr create -g $RESOURCE_GROUP -n $ACR -sku basic --admin-enable true
