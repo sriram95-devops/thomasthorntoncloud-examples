@@ -30,6 +30,7 @@ stages:
       steps:
         - task: Docker@2
           inputs:
+            
             containerRegistry: 'mydockeracrnewtoday'
             repository: 'todaybuild'
             command: 'buildAndPush'
