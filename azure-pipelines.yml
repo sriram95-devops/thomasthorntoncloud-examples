@@ -37,7 +37,7 @@ stages:
 
 
 - stage: create_webapp_container
-  dependsOn: [build]
+  dependsOn: [build_docker]
   jobs:
     - job: create_app
       steps:
