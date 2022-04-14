@@ -33,3 +33,41 @@ stages:
                   ACR="mydockeracrnewtoday"
                   az group create -l $LOCATION -n $RESOURCE_GROUP
                   az acr create --name $ACR --resource-group $RESOURCE_GROUP --sku basic --admin-enable true
+- stage: build_docker
+  dependsOn: [create_acr]
+  jobs:
+    - job: "build"
+      pool:
+       vmImage: $(vmImageName)
+      steps:
+        - task: Docker@2
+          inputs:
+            containerRegistry: 'mydockeracrnewtoday'
+            repository: 'todaybuild'
+            command: 'buildAndPush'
+            Dockerfile: '$(Build.SourcesDirectory)/aspnet-core-dotnet-core/Dockerfile'
+
+- stage: create_webapp_container
+  dependsOn: [build_docker]
+  jobs:
+    - job: create_app
+      pool:
+       vmImage: $(vmImageName)
+      steps:
+      - task: AzureCLI@2
+        inputs:
+          azureSubscription: 'Azure subscription 1 (7c95b25d-a3ce-47f1-bee8-4fe38e644646)'
+          scriptType: 'bash'
+          scriptLocation: 'inlineScript'
+          inlineScript: |
+            #!/bin/bash
+                            az config set extension.use_dynamic_install=yes_without_prompt
+                            az provider register --namespace Microsoft.App
+                            RESOURCE_GROUP="RG"
+                            LOCATION="eastus"
+                            CONTAINERAPPS_ENVIRONMENT="tamops-environment"
+                            az containerapp env create \
+                                            -n $CONTAINERAPPS_ENVIRONMENT \
+                                            -g $RESOURCE_GROUP \
+                                            -l $LOCATION
+
