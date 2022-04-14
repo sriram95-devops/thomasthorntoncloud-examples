@@ -24,9 +24,9 @@ stages:
                   az acr create -g $RESOURCE_GROUP -n $ACR -sku basic --admin-enable true
 
 - stage: build_docker
-  dependsOn: create_acr
+  dependsOn: [create_acr]
   jobs:
-    - job: build
+    - job: "build"
       steps:
         - task: Docker@2
           inputs:
@@ -37,7 +37,7 @@ stages:
 
 
 - stage: create_webapp_container
-  dependsOn: build
+  dependsOn: [build]
   jobs:
     - job: create_app
       steps:
