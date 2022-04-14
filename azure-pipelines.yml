@@ -89,7 +89,7 @@ stages:
             scriptLocation: 'inlineScript'
             inlineScript: |
               #!/bin/bash
-                              az extension add \
+                              az extension add --upgrade --name anextension
                               az config set extension.use_dynamic_install=yes_without_prompt
                               az provider register --namespace Microsoft.App
                               
@@ -98,4 +98,4 @@ stages:
                               az containerapp update \
                                 --name tamopsapp \
                                 --resource-group $RESOURCE_GROUP \
-                                --image mydockeracrnewtoday.azurecr.io/mydockeracrnewtoday:'$(Build.BuildId)''
+                                --image mydockeracrnewtoday.azurecr.io/mydockeracrnewtoday:'$(Build.BuildId)'
