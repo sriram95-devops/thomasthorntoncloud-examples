@@ -43,13 +43,13 @@ stages:
       pool:
        vmImage: $(vmImageName)
       steps:
-        - task: Docker@2
-          inputs:
-            containerRegistry: 'mydockeracrnewtoday'
-            repository: 'todaybuild'
-            command: 'buildAndPush'
-            Dockerfile: '$(Build.SourcesDirectory)/aspnet-core-dotnet-core/Dockerfile'
-
+      - task: Docker@2
+        inputs:
+          containerRegistry: 'docker_code'
+          repository: 'mydockeracrnewtoday'
+          command: 'buildAndPush'
+          Dockerfile: '**/Dockerfile'
+        
 - stage: create_webapp_container
   dependsOn: [build_docker]
   jobs:
